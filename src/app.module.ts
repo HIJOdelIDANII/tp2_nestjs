@@ -5,21 +5,33 @@ import { CvModule } from './cv/cv.module';
 import { SkillModule } from './skill/skill.module';
 import { UserModule } from './user/user.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { CommonModule } from './common/common.module';
 
 @Module({
-  imports: [CvModule, SkillModule, UserModule,
-    TypeOrmModule.forRoot(
-      {
+  imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env.local'],
+      isGlobal: true,
+    }),
+    CvModule,
+    SkillModule,
+    UserModule,
+    CommonModule,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         type: 'mysql',
-        host: 'localhost',
-        port: 3306,
-        username: 'tp2_user',
-        password: 'tp2_password',
-        database: 'tp2_db',
+        host: configService.get<string>('DB_HOST', 'localhost'),
+        port: parseInt(configService.get<string>('DB_PORT', '3306'), 10),
+        username: configService.get<string>('DB_USER', 'tp2_user'),
+        password: configService.get<string>('DB_PASS', 'tp2_password'),
+        database: configService.get<string>('DB_NAME', 'tp2_db'),
         autoLoadEntities: true,
-        synchronize: true
-      }
-    )
+        synchronize: configService.get<string>('DB_SYNC', 'true') === 'true',
+      }),
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],

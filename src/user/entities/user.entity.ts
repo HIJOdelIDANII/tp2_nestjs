@@ -2,19 +2,13 @@ import { TimestampAbstract } from 'src/common/timestamp';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Cv extends TimestampAbstract {
+export class User extends TimestampAbstract {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column()
-  name: string;
-  @Column()
-  firstname: string;
-  @Column()
-  age: number;
+  username: string;
   @Column({ unique: true })
-  cin: number;
+  email: string;
   @Column()
-  job: string;
-  @Column()
-  path: string;
+  password: string;
 }
