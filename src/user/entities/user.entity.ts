@@ -12,6 +12,8 @@ export class User extends TimestampAbstract {
   email: string;
   @Column()
   password: string;
-  @OneToMany(() => Cv, (cv) => cv.user)
+  @OneToMany(() => Cv, (cv) => cv.user, {
+    onDelete: 'CASCADE',
+  })
   cvs: Cv[];
 }
