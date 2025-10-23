@@ -1,5 +1,6 @@
 import { TimestampAbstract } from 'src/common/timestamp';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Cv } from 'src/cv/entities/cv.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User extends TimestampAbstract {
@@ -11,4 +12,6 @@ export class User extends TimestampAbstract {
   email: string;
   @Column()
   password: string;
+  @OneToMany(() => Cv, (cv) => cv.user)
+  cvs: Cv[];
 }

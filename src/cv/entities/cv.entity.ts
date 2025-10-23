@@ -1,7 +1,9 @@
 import { TimestampAbstract } from 'src/common/timestamp';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Skill } from 'src/skill/entities/skill.entity';
+import { User } from 'src/user/entities/user.entity';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity()     
 export class Cv extends TimestampAbstract {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -17,4 +19,9 @@ export class Cv extends TimestampAbstract {
   job: string;
   @Column()
   path: string;
+  @ManyToOne(() => User, (u) => u.cvs)
+  user: User;
+  @ManyToMany(() => Skill)
+  @JoinTable()
+  skills: Skill[]
 }
